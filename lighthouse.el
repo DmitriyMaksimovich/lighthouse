@@ -26,7 +26,7 @@ Can be a color name (e.g., \"orange\") or a hex code (e.g., \"#504945\")."
                (when lighthouse--overlays
                  (dolist (ov lighthouse--overlays)
                    (when (overlay-buffer ov)
-                     (overlay-put ov 'face `(:background ,value :extend t)))))))))
+                     (overlay-put ov 'face `(:background ,value :extend t))))))))))
 
 (defvar-local lighthouse--overlays nil
   "List of overlays used for highlighting lines in the current buffer.")
