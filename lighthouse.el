@@ -12,16 +12,12 @@
 (defvar-local lighthouse--overlays nil
   "List of overlays used for highlighting lines in the current buffer.")
 
-(defun lighthouse--get-line-number ()
-  "Return the current line number."
-  (line-number-at-pos))
-
 (defun lighthouse--highlight-line (line-num)
   "Highlight the line at LINE-NUM in the current buffer."
   (save-excursion
     (goto-line line-num)
     (let ((overlay (make-overlay (line-beginning-position) (line-end-position))))
-      (overlay-put overlay 'face '(:background "yellow" :extend t))
+      (overlay-put overlay 'face '(:background "orange" :extend t))
       (overlay-put overlay 'lighthouse t)
       (push overlay lighthouse--overlays))))
 
@@ -34,12 +30,12 @@
         (push ov to-remove)))
     (dolist (ov to-remove)
       (delete-overlay ov)
-      (setq lighthouse--overlays (delete ov line-highlight--overlays)))))
+      (setq lighthouse--overlays (delete ov lighthouse--overlays)))))
 
 (defun lighthouse-toggle ()
   "Toggle highlighting of the current line."
   (interactive)
-  (let ((line-num (lighthouse--get-line-number)))
+  (let ((line-num (line-number-at-pos)))
     (if (member line-num (lighthouse--get-highlighted-lines))
         (lighthouse--unhighlight-line line-num)
       (lighthouse--highlight-line line-num))))
@@ -60,22 +56,21 @@
       (delete-overlay ov)))
   (setq lighthouse--overlays nil))
 
-(defun lighthouse--cleanup ()
-  "Clean up highlights when the buffer is killed."
-  (lighthouse-clear-all))
-
 ;;;###autoload
 (define-minor-mode lighthouse-mode
   "Minor mode for persistent line highlighting."
-  :lighter " LHL"
+  :lighter " LH"
   :keymap (let ((map (make-sparse-keymap)))
             (define-key map (kbd "C-c h") #'lighthouse-toggle)
             (define-key map (kbd "C-c c") #'lighthouse-clear-all)
             map)
   (if lighthouse-mode
-      (add-hook 'kill-buffer-hook #'lighthouse--cleanup nil t)
-    (remove-hook 'kill-buffer-hook #'lighthouse--cleanup t)
+      (add-hook 'kill-buffer-hook #'lighthouse-clear-all nil t)
+    (remove-hook 'kill-buffer-hook #'lighthouse-clear-all t)
     (lighthouse-clear-all)))
 
 (provide 'lighthouse)
 ;;; lighthouse.el ends here
+;;(add-to-list 'load-path "~/.emacs.d/plugins/")
+;;(require 'lighthouse)
+;;M-x lighthouse-mode RET
