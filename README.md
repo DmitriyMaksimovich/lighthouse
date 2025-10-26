@@ -8,13 +8,15 @@
  - lighthouse-clear-all: Remove all highlights in the current buffer. 
  - lighthouse-next: Jump to the next highlighted line, cycling to the first if at the last. 
  - lighthouse-prev: Jump to the previous highlighted line, cycling to the last if at the first. 
+ 
+ ![demo](./lh.gif)
 
 ## How to use (doom emacs guide)
 ### Add the package in `packages.el`
 
 ```el
 (package! lighthouse
-  :recipe (:host github :repo "your-username/lighthouse"))
+  :recipe (:host github :repo "DmitriyMaksimovich/lighthouse"))
 ```
 
 ### Configurate in `config.el`
